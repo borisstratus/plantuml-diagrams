@@ -1,42 +1,21 @@
 @startuml
 
-actor Utilisateur as user
-participant "formSign.js" as form <<Contrôleur formulaire>>
-participant "Sign.java" as controler <<(C,#ADD1B2) Contrôleur formulaire>>
-participant "Secure.java" as secure <<(C,#ADD1B2) authentification>>
-participant "Security.java" as security <<(C,#ADD1B2) sécurité>>
+    skinparam backgroundColor #EEEBDC
+    actor 使用者
+    participant " 頭等艙" as A
+    participant " 第二類" as B
+    participant " 最後一堂課" as 別的東西
+    使用者-> A: 完成這項工作
+    activate A
+    A -> B: 創建請求
+    activate B
+    B -> 別的東西: 創建請求
+    activate 別的東西
+    別的東西--> B: 這項工作完成
+    destroy 別的東西
+    B --> A: 請求創建
+    deactivate B
+    A --> 使用者: 做完
+    deactivate A
 
-box "Application Web" #LightBlue
-	participant form
-end box
-
-box "Serveur Play" #LightGreen
-	participant controler
-	participant secure
-	participant security
-end box
-
-user -> form : submitSignIn()
-form -> form : getParameters()
-form -> form : result = checkFields()
-
-alt result
-
-    form -> controler : formSignIn(email,pwd)
-    controler -> controler : result = checkFields()
-    
-    alt result
-    	controler -> secure : Secure.authenticate(email, pwd, true);
-    	secure -> security : onAuthenticated()
-    	security --> form : renderJSON(0);
-    	form --> user : display main page
-    else !result
-    	controler --> form : renderJSON(1)
-    	form --> user : display error
-    end
-    
-else !result
-	form --> user : display error
-end
-
-@enduml
+    @enduml
