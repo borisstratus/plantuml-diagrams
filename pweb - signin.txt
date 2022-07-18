@@ -1,21 +1,50 @@
 @startuml
 
-    skinparam backgroundColor #EEEBDC
-    actor 使用者
-    participant " 頭等艙" as A
-    participant " 第二類" as B
-    participant " 最後一堂課" as 別的東西
-    使用者-> A: 完成這項工作
-    activate A
-    A -> B: 創建請求
-    activate B
-    B -> 別的東西: 創建請求
-    activate 別的東西
-    別的東西--> B: 這項工作完成
-    destroy 別的東西
-    B --> A: 請求創建
-    deactivate B
-    A --> 使用者: 做完
-    deactivate A
+skinparam component {
+    FontColor          black
+    AttributeFontColor black
+    FontSize           17
+    AttributeFontSize  15
+    AttributeFontname  Droid Sans Mono
+    BackgroundColor    #6A9EFF
+    BorderColor        black
+    ArrowColor         #222266
+}
 
-    @enduml
+title "OSCIED Charms Relations (Simple)"
+skinparam componentStyle uml2
+
+cloud {
+    interface "JuJu" as juju
+    interface "API" as api
+    interface "Storage" as storage
+    interface "Transform" as transform
+    interface "Publisher" as publisher
+    interface "Website" as website
+
+    juju - [JuJu]
+
+    website - [WebUI]
+    [WebUI] .up.> juju
+    [WebUI] .down.> storage
+    [WebUI] .right.> api
+
+    api - [Orchestra]
+    transform - [Orchestra]
+    publisher - [Orchestra]
+    [Orchestra] .up.> juju
+    [Orchestra] .down.> storage
+
+    [Transform] .up.> juju
+    [Transform] .down.> storage
+    [Transform] ..> transform
+
+    [Publisher] .up.> juju
+    [Publisher] .down.> storage
+    [Publisher] ..> publisher
+
+    storage - [Storage]
+    [Storage] .up.> juju
+}
+
+@enduml
