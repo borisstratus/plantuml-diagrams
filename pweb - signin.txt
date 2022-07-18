@@ -17,6 +17,5 @@
     deactivate B
     A --> 使用者: 做完
     deactivate A
-	deactivate B
 
     @enduml
